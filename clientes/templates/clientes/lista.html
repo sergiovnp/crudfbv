@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h3>Clientes</h3>
+          <a href="{% url 'lista' %}">Listar Cliente</a>            
+          </div>
+          <div class="col-md-3">
+          <a class="btn btn-info btn-sm" href="{% url 'crear' %}">Crear Cliente</a>       
+          </div>
+          <div class="col-md-4">
+              <form class="form-inline" action="">
+                  <input class="form-control form-control-sm" type="text" name="buscar" placeholder="Apellido">
+                  <button class="btn btn-info btn-sm">Buscar</button>
+                </form>
+          </div>
+        </div>
+      </div>
+   
+    <br>
+    <table class="table table-hover table-sm">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Edad</th>
+            <th scope="col">DNI</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+          <tr>
+            <th scope="row">{{cliente.id}}</th>
+            <td><a href="{% url 'detalle' cliente.id %}">{{cliente.apellido}}</a></td>
+            <td>{{cliente.nombre}}</td>
+            <td>{{cliente.edad}}</td>
+            <td>{{cliente.dni}}</td>
+            <td>{{cliente.status}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <br>
+      <h5>Cantidad de clientes: {{cantidad}}</h5>
+     
+
+      {% if clientes.has_other_pages %}
+        <ul class="pagination justify-content-center">
+          {% if clientes.has_previous %}
+            <li ><a class="page-link"  href="?page={{ clientes.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li class="page-link" class="disabled"><span>&laquo;</span></li>
+          {% endif %}
+          {% for i in clientes.paginator.page_range %}
+            {% if clientes.number == i %}
+              <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if clientes.has_next %}
+            <li><a class="page-link" href="?page={{ clientes.next_page_number }}">&raquo;</a></li>
+          {% else %}
+            <li class="page-link" class="disabled"><span>&raquo;</span></li>
+          {% endif %}
+        </ul>
+      {% endif %}
+
+</div>
+
+{% endblock %}
